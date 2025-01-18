@@ -31,7 +31,7 @@ Please extract the following information in JSON format:
     "start_time": "YYYY-MM-DD HH:mm",
     "end_time": "YYYY-MM-DD HH:mm",
     "location": "Location",
-    "description": "Detailed description",
+    "description": "Detailed event information, excluding time/location/basic attendee info that are covered by other fields",
     "attendees": ["attendee1@email.com", "attendee2@email.com"],
     "reminder_minutes": reminder time in minutes
 }}
@@ -90,7 +90,30 @@ Rules:
 7. Title and description:
    - Make the summary concise but informative
    - Include the meeting type (e.g., "Team Meeting"/"团队会议", "Client Meeting"/"客户会议")
-   - Use the original text as description if no specific details are provided
+   - For description, preserve all important details while improving readability:
+     - Keep all event-specific information (abstract, agenda, biography, etc.)
+     - Preserve technical details (meeting links, IDs, passwords, etc.)
+     - Remove only information that's already covered by other fields (time, location, basic attendee list)
+     - Format the text for better readability (add line breaks, sections, etc.)
+     - Chinese example:
+       Input: "明天下午3点在星巴克见面，讨论新项目方案。具体议程：1. 项目背景介绍 2. 技术方案讨论 3. 时间节点确认。腾讯会议：888 999 000，密码：1234"
+       Description: "议程：
+1. 项目背景介绍
+2. 技术方案讨论
+3. 时间节点确认
+
+腾讯会议：888 999 000
+密码：1234"
+     - English example:
+       Input: "Prof. Smith's seminar on Quantum Computing. Abstract: This talk introduces recent developments in quantum error correction. We will discuss the surface code and its implementation on superconducting circuits. Join via Zoom: https://zoom.us/j/123456, Passcode: qc2024"
+       Description: "Speaker: Prof. Smith
+
+Abstract:
+This talk introduces recent developments in quantum error correction. We will discuss the surface code and its implementation on superconducting circuits.
+
+Meeting Link:
+Zoom: https://zoom.us/j/123456
+Passcode: qc2024"
 
 Return only the JSON result without any additional text."""
 
