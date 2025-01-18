@@ -16,7 +16,7 @@ class TestParser(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Set up test fixtures"""
-        cls.parser = TextParser(api_key="sk-f0d7440b9ccc4fdaa077ddb4a5738e4d")
+        cls.parser = TextParser(api_key="sk-xxxxxxx")
         cls.generator = ICSGenerator()
         
     def setUp(self):

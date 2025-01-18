@@ -12,7 +12,7 @@ from src.calendar.ics_generator import ICSGenerator
 
 def main():
     # Initialize parser and generator
-    parser = TextParser(api_key="sk-f0d7440b9ccc4fdaa077ddb4a5738e4d")
+    parser = TextParser(api_key="sk-xxxxxxx")
     generator = ICSGenerator()
     
     # Example cases
