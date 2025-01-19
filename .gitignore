@@ -20,5 +20,6 @@ env/
 .DS_Store 
 
 # Android
-buildozer.spec
 buildozer/
+
+my_calendar.ics
