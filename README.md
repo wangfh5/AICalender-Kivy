@@ -52,8 +52,14 @@ pip install kivy
 ```
 
 3. 准备 API Key：
-   您需要准备一个 [DeepSeek](https://platform.deepseek.com/) API Key。可以通过以下方式提供：
-   - GUI 界面：在设置界面填入
+   您需要准备一个支持 OpenAI SDK 的大语言模型 API Key。支持以下服务商：
+   - OpenAI API（默认）
+   - DeepSeek API
+   - Claude API
+   - 其他兼容 OpenAI SDK 的服务商
+
+   可以通过以下方式提供：
+   - GUI 界面：在设置界面填入 API Key、Base URL 和模型名称
    - 命令行：运行时会提示输入
    - API 调用：作为参数传入
 
@@ -69,8 +75,11 @@ python main.py
 ```
 
 GUI 界面提供：
+- API 设置
+  - API Key 输入
+  - Base URL 设置（默认为 OpenAI API）
+  - 模型名称设置（默认为 gpt-3.5-turbo）
 - 直观的事件输入界面
-- API Key 设置
 - 日历文件自动导出
 - 实时反馈
 
@@ -82,7 +91,7 @@ python src/main.py
 ```
 
 程序会引导您：
-1. 输入 Deepseek API Key（输入时不会显示在屏幕上）
+1. 输入支持 OpenAI SDK 的大语言模型 API Key（输入时不会显示在屏幕上）
 2. 输入日程安排，支持以下方式：
    - 每个日程可以包含多行文本
    - 使用 `---` 或 `===` 分隔不同的日程
@@ -110,7 +119,7 @@ done
 
 如果需要在自己的代码中调用，可以参考 `examples/basic_usage.py`：
 
-1. 首先在代码中填入你的 [DeepSeek](https://platform.deepseek.com/) API Key：
+1. 首先在代码中填入你的支持 OpenAI SDK 的大语言模型 API Key：
 ```python
 API_KEY = "sk-..." # 替换为你的 API Key
 ```

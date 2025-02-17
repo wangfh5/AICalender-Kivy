@@ -11,12 +11,34 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from src.nlp.text_parser import TextParser
 from src.calendar.ics_generator import ICSGenerator
 
-def get_api_key() -> str:
-    """获取用户的API key"""
+def get_api_settings() -> dict:
+    """获取用户的API设置"""
     print("\n欢迎使用AI日历助手！")
-    print("请输入您的Deepseek API Key (输入内容不会显示在屏幕上)：")
+    
+    # 获取API Key
+    print("请输入您的 API Key (输入内容不会显示在屏幕上)：")
     import getpass
-    return getpass.getpass()
+    api_key = getpass.getpass()
+    
+    # 获取Base URL
+    print("\n请输入API的Base URL")
+    print("直接回车使用默认值: https://api.openai.com/v1")
+    base_url = input("Base URL: ").strip()
+    if not base_url:
+        base_url = "https://api.openai.com/v1"
+    
+    # 获取模型名称
+    print("\n请输入要使用的模型名称")
+    print("直接回车使用默认值: gpt-3.5-turbo")
+    model = input("Model: ").strip()
+    if not model:
+        model = "gpt-3.5-turbo"
+    
+    return {
+        "api_key": api_key,
+        "base_url": base_url,
+        "model": model
+    }
 
 def get_event_texts() -> List[str]:
     """获取用户输入的日程文本"""
@@ -86,8 +108,8 @@ def get_event_texts() -> List[str]:
 
 def main():
     try:
-        # 获取API key
-        api_key = get_api_key()
+        # 获取API设置
+        settings = get_api_settings()
         
         # 获取日程文本
         texts = get_event_texts()
@@ -95,7 +117,11 @@ def main():
         print(f"\n收到 {len(texts)} 个日程，开始处理...")
         
         # 初始化解析器和生成器
-        parser = TextParser(api_key=api_key)
+        parser = TextParser(
+            api_key=settings["api_key"],
+            base_url=settings["base_url"],
+            model=settings["model"]
+        )
         generator = ICSGenerator()
         
         # 处理每个日程

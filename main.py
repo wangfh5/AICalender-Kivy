@@ -15,12 +15,40 @@ class CalendarApp(App):
         # Set up the main layout
         layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
         
+        # Settings layout
+        settings_layout = BoxLayout(orientation='vertical', size_hint_y=None, height=120, spacing=5)
+        
         # API Key input
         api_key_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=40)
         api_key_label = Label(text='API Key:', size_hint_x=0.3)
         self.api_key_input = TextInput(password=True, multiline=False)
         api_key_layout.add_widget(api_key_label)
         api_key_layout.add_widget(self.api_key_input)
+        
+        # Base URL input
+        base_url_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=40)
+        base_url_label = Label(text='Base URL:', size_hint_x=0.3)
+        self.base_url_input = TextInput(
+            text='https://api.openai.com/v1',
+            multiline=False
+        )
+        base_url_layout.add_widget(base_url_label)
+        base_url_layout.add_widget(self.base_url_input)
+        
+        # Model name input
+        model_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=40)
+        model_label = Label(text='Model:', size_hint_x=0.3)
+        self.model_input = TextInput(
+            text='gpt-3.5-turbo',
+            multiline=False
+        )
+        model_layout.add_widget(model_label)
+        model_layout.add_widget(self.model_input)
+        
+        # Add settings to settings layout
+        settings_layout.add_widget(api_key_layout)
+        settings_layout.add_widget(base_url_layout)
+        settings_layout.add_widget(model_layout)
         
         # Event text input
         event_label = Label(text='Event Description:', size_hint_y=None, height=30)
@@ -42,7 +70,7 @@ class CalendarApp(App):
         )
         
         # Add widgets to layout
-        layout.add_widget(api_key_layout)
+        layout.add_widget(settings_layout)
         layout.add_widget(event_label)
         layout.add_widget(self.event_input)
         layout.add_widget(self.generate_button)
@@ -70,7 +98,11 @@ class CalendarApp(App):
     def process_calendar(self, api_key, event_text):
         try:
             # Initialize parser and generator
-            parser = TextParser(api_key)
+            parser = TextParser(
+                api_key=api_key,
+                base_url=self.base_url_input.text,
+                model=self.model_input.text
+            )
             generator = ICSGenerator()
             
             # Parse event text
@@ -86,8 +118,8 @@ class CalendarApp(App):
                 calendar_path = 'my_calendar.ics'
             
             # Add events and save to file
-            generator.add_event(event)  # 先添加事件
-            generator.save(calendar_path) # 然后保存文件
+            generator.add_event(event)
+            generator.save(calendar_path)
             
             self.status_label.text = f'Calendar saved to {calendar_path}'
         except Exception as e:
@@ -102,4 +134,4 @@ if __name__ == '__main__':
         android = None
     
     Window.clearcolor = (0.9, 0.9, 0.9, 1)  # Light gray background
-    CalendarApp().run() 
+    CalendarApp().run()

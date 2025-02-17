@@ -120,12 +120,23 @@ Return only the JSON result without any additional text."""
 class TextParser:
     """Parse natural language text into calendar event data"""
     
-    def __init__(self, api_key: str, timezone: str = 'Asia/Shanghai', max_retries: int = 3):
-        """Initialize the parser with API key and timezone"""
+    def __init__(self, api_key: str, base_url: str = "https://api.openai.com/v1", 
+                 model: str = "gpt-3.5-turbo", timezone: str = 'Asia/Shanghai', 
+                 max_retries: int = 3):
+        """Initialize the parser with API key and timezone
+        
+        Args:
+            api_key (str): API key for the LLM service
+            base_url (str, optional): Base URL for the API. Defaults to OpenAI's URL.
+            model (str, optional): Model name to use. Defaults to "gpt-3.5-turbo".
+            timezone (str, optional): Timezone for date parsing. Defaults to 'Asia/Shanghai'.
+            max_retries (int, optional): Maximum number of API call retries. Defaults to 3.
+        """
         self.client = OpenAI(
             api_key=api_key,
-            base_url="https://api.deepseek.com"
+            base_url=base_url
         )
+        self.model = model
         self.timezone = pytz.timezone(timezone)
         self.max_retries = max_retries
         
@@ -134,9 +145,9 @@ class TextParser:
         try:
             logger.info(f"Calling API (attempt {retry_count + 1})")
             response = self.client.chat.completions.create(
-                model="deepseek-chat",
+                model=self.model,
                 messages=messages,
-                stream=False
+                temperature=0.1
             )
             content = response.choices[0].message.content
             logger.debug(f"API Response: {content}")
